@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 /* SEGMENTS DATA */
@@ -47,38 +47,41 @@ export default function Segments() {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState(1);
+  const shouldReduceMotion = useReducedMotion(); // Detect reduced motion preference
 
   useEffect(() => {
-    let rafId;
-    const onScroll = () => {
-      if (!sectionRef.current) return;
+    if (!sectionRef.current) return;
 
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        const sectionTop = sectionRef.current.offsetTop;
-        const scrollY = window.scrollY;
-        const progress = (scrollY - sectionTop) / window.innerHeight;
-        const newIndex = Math.floor(progress);
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: [0, 0.5, 1], // Trigger at 0%, 50%, 100% visibility
+    };
 
-        if (newIndex !== active) {
-          setDirection(newIndex > active ? 1 : -1);
-          setActive(Math.max(0, Math.min(newIndex, segments.length - 1)));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const progress = (window.scrollY - sectionRef.current.offsetTop) / window.innerHeight;
+          const newIndex = Math.floor(progress);
+          if (newIndex !== active) {
+            setDirection(newIndex > active ? 1 : -1);
+            setActive(Math.max(0, Math.min(newIndex, segments.length - 1)));
+          }
         }
       });
-    };
+    }, options);
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(rafId);
-    };
+    observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
   }, [active]);
 
-  const enterY = 120;
-  const exitY = -120;
-
-  // Mobile-க்கு optimized shadow & radius
-  const cardShadow = "0 20px 40px rgba(0,0,0,0.15)"; // Reduced shadow intensity
+  const enterY = 80; // Reduced distance for smoother feel
+  const exitY = -80;
+  const slideDistance = shouldReduceMotion ? 0 : 40; // Disable slide on reduced motion
+  const duration = shouldReduceMotion ? 0.2 : 0.35; // Shorter on reduced motion
+  const tiltAngle = shouldReduceMotion ? 0 : 12; // No tilt on reduced motion
+  const cardShadow = shouldReduceMotion ? "0 10px 20px rgba(0,0,0,0.1)" : "0 20px 40px rgba(0,0,0,0.15)";
 
   return (
     <section
@@ -88,34 +91,34 @@ export default function Segments() {
     >
       <div 
         className="sticky top-0 h-screen flex items-center justify-center"
-        style={{ perspective: '1200px' }} // Slightly higher perspective for better 3D feel
+        style={{ perspective: shouldReduceMotion ? 'none' : '1200px' }}
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={active}
-            initial={{ opacity: 0, y: enterY, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: exitY, scale: 0.98 }}
+            initial={{ opacity: 0, y: enterY }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: exitY }}
             transition={{
-              duration: 0.35, // Slightly faster & smoother
-              ease: [0.25, 0.1, 0.25, 1], // Custom bezier curve - very smooth
-              type: "tween" // Explicitly use tween for better mobile perf
+              duration,
+              ease: [0.25, 0.1, 0.25, 1],
+              type: "tween"
             }}
             style={{
               backgroundColor: segments[active].bg,
-              willChange: "transform, opacity", // GPU acceleration
+              willChange: "transform, opacity",
             }}
             className={`
               w-[92vw] max-w-[1500px]
               h-[78vh] md:h-[85vh]
-              rounded-3xl md:rounded-[48px]  // Smaller radius on mobile
+              rounded-3xl md:rounded-[48px]
               shadow-[${cardShadow}]
               cursor-pointer
               grid grid-cols-1 md:grid-cols-2
               items-center gap-6 md:gap-20
               px-6 md:px-24
               overflow-hidden
-              transform-gpu  // Force GPU rendering
+              transform-gpu
             `}
             onClick={() =>
               navigate(`/products?category=${encodeURIComponent(segments[active].title)}`)
@@ -123,11 +126,11 @@ export default function Segments() {
           >
             {/* IMAGE */}
             <motion.div
-              initial={{ x: direction > 0 ? -40 : 40, opacity: 0 }}
+              initial={{ x: direction > 0 ? -slideDistance : slideDistance, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
+              transition={{ duration: duration - 0.1, ease: "easeOut" }}
               style={{
-                transform: 'rotateY(12deg)', // Slightly reduced tilt for mobile
+                transform: `rotateY(${tiltAngle}deg)`,
                 transformStyle: 'preserve-3d',
                 willChange: "transform",
               }}
@@ -137,15 +140,15 @@ export default function Segments() {
                 src={segments[active].image}
                 alt={segments[active].title}
                 className="max-h-[220px] md:max-h-[420px] object-contain drop-shadow-xl"
-                loading="lazy" // Performance boost
+                loading="lazy"
               />
             </motion.div>
 
             {/* TEXT */}
             <motion.div
-              initial={{ x: direction > 0 ? 40 : -40, opacity: 0 }}
+              initial={{ x: direction > 0 ? slideDistance : -slideDistance, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
+              transition={{ duration: duration - 0.1, ease: "easeOut" }}
               className="order-2 md:order-none text-center md:text-left px-4 md:px-0"
             >
               <span className="inline-block mb-3 text-xs md:text-sm font-semibold tracking-wide text-primary">
