@@ -46,43 +46,47 @@ export default function Segments() {
   const sectionRef = useRef(null);
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
+  const [direction, setDirection] = useState(1); // 1 for down, -1 for up
 
   /* SCROLL → CARD INDEX (NO OVERLAP) */
   useEffect(() => {
     const onScroll = () => {
       if (!sectionRef.current) return;
 
-      const rect = sectionRef.current.getBoundingClientRect();
-      const progress = Math.abs(rect.top) / window.innerHeight;
+      const sectionTop = sectionRef.current.offsetTop;
+      const scrollY = window.scrollY;
+      const progress = (scrollY - sectionTop) / window.innerHeight;
+      const newIndex = Math.floor(progress);
 
-      const index = Math.floor(progress);
-      setActive(Math.min(index, segments.length - 1));
+      if (newIndex !== active) {
+        setDirection(newIndex > active ? 1 : -1);
+        setActive(Math.max(0, Math.min(newIndex, segments.length - 1)));
+      }
     };
 
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [active]);
+
+  const enterY = 120; // Always from bottom
+  const exitY = -120; // Always exit to top
 
   return (
     <section
       ref={sectionRef}
-      style={{ height: `${segments.length * 100}vh` }}
+      style={{ height: `${(segments.length + 1) * 100}vh` }} // Extra height to prevent last card from moving up
       className="relative"
     >
       {/* STICKY VIEWPORT */}
-      <div className="sticky top-0 h-screen flex items-center justify-center">
+      <div className="sticky top-0 h-screen flex items-center justify-center" style={{ perspective: '1000px' }}>
 
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={active}
-            initial={
-              active === 0
-                ? false
-                : { opacity: 0, y: 120, scale: 0.95 }
-            }
+            initial={{ opacity: 0, y: enterY, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -120, scale: 0.95 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            exit={{ opacity: 0, y: exitY, scale: 0.95 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }} // Even faster duration for card movement
             style={{ backgroundColor: segments[active].bg }}
             onClick={() =>
               navigate(
@@ -114,9 +118,10 @@ export default function Segments() {
           >
             {/* IMAGE */}
             <motion.div
-              initial={active === 0 ? false : { x: -60, opacity: 0 }}
+              initial={{ x: direction > 0 ? -60 : 60, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.3 }} // Even faster duration for image/text slide
+              style={{ transform: 'rotateY(15deg)', transformStyle: 'preserve-3d' }} // Static 3D tilt like flolapo
               className="
                 order-1
                 md:order-none
@@ -137,9 +142,9 @@ export default function Segments() {
 
             {/* TEXT */}
             <motion.div
-              initial={active === 0 ? false : { x: 60, opacity: 0 }}
+              initial={{ x: direction > 0 ? 60 : -60, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.3 }} // Even faster duration for image/text slide
               className="
                 order-2
                 md:order-none
