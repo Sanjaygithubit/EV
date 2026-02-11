@@ -97,25 +97,7 @@ export default function Footer() {
           </ul>
 
           {/* WHATSAPP CTA — SWEEP */}
-          <a
-            href="https://wa.me/919XXXXXXXXX"
-            target="_blank"
-            rel="noreferrer"
-            className="
-              relative overflow-hidden
-              inline-block mt-4
-              bg-primary text-white
-              px-4 py-2 rounded-lg font-medium
-              after:absolute after:inset-0
-              after:bg-white/15 after:translate-x-[-100%]
-              hover:after:translate-x-0
-              after:transition after:duration-300
-            "
-          >
-            <span className="relative z-10">
-              WhatsApp Enquiry
-            </span>
-          </a>
+          
         </div>
       </div>
 

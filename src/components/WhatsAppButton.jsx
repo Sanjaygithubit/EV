@@ -1,5 +1,5 @@
 export default function WhatsAppButton({ productName }) {
-  const phone = "919XXXXXXXXX";
+  const phone = "917826954887";
   const msg = encodeURIComponent(
     `Hi, I am interested in ${productName}. Please share details.`
   );

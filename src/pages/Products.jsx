@@ -59,11 +59,13 @@ export default function Products() {
 
           {/* SIDEBAR */}
           <div className="hidden lg:block">
+             <div className="sticky top-24">
             <CategorySidebar
               categories={categories}
               activeCategory={activeCategory}
               setActiveCategory={setActiveCategory}
             />
+          </div>
           </div>
 
           {/* PRODUCTS */}

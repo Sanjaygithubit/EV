@@ -117,13 +117,13 @@ export default function Contact() {
             viewport={{ once: true }}
             className="bg-white rounded-2xl border p-8"
           >
-            <h3 className="text-xl font-semibold mb-6">Send us a Message</h3>
+            <h3 className="text-xl font-semibold mb-6">Get Expert CallBack</h3>
 
             <form className="space-y-5">
               <input className="w-full border rounded-xl px-4 py-3" placeholder="Full Name *" />
               <input className="w-full border rounded-xl px-4 py-3" placeholder="Email Address *" />
               <input className="w-full border rounded-xl px-4 py-3" placeholder="Phone Number *" />
-              <input className="w-full border rounded-xl px-4 py-3" placeholder="Subject *" />
+             
               <textarea
                 rows="4"
                 className="w-full border rounded-xl px-4 py-3"

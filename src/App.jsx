@@ -6,6 +6,8 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Contact from "./pages/Contact";
+import FloatingWhatsApp from "./components/FloatingWhatsApp";
+
 
 export default function App() {
   return (
@@ -22,6 +24,7 @@ export default function App() {
       </Routes>
 
       <Footer />
+      <FloatingWhatsApp />
     </>
   );
 }
