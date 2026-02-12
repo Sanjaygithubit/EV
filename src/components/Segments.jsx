@@ -64,7 +64,6 @@ export default function Segments() {
               }
               className="relative rounded-3xl overflow-hidden cursor-pointer h-[220px]"
             >
-              {/* Background with pixel control */}
               <div
                 className="absolute inset-0 bg-center bg-no-repeat"
                 style={{
@@ -72,7 +71,6 @@ export default function Segments() {
                   backgroundSize: "900px 600px"
                 }}
               />
-
               <div className="absolute inset-0 bg-black/60" />
 
               <div className="relative z-10 p-6 text-white">
@@ -112,6 +110,20 @@ export default function Segments() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const handleScrollNext = (e) => {
+    e.stopPropagation();
+
+    if (active < segments.length - 1) {
+      const nextIndex = active + 1;
+      const sectionTop = sectionRef.current.offsetTop;
+
+      window.scrollTo({
+        top: sectionTop + nextIndex * window.innerHeight,
+        behavior: "smooth"
+      });
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -149,7 +161,7 @@ export default function Segments() {
               px-24
             "
           >
-            {/* Background Image with pixel control */}
+            {/* Background */}
             <div
               className="absolute inset-0 bg-center bg-no-repeat"
               style={{
@@ -158,7 +170,6 @@ export default function Segments() {
               }}
             />
 
-            {/* Dark Overlay */}
             <div className="absolute inset-0 bg-black/60" />
 
             {/* Right Text */}
@@ -180,6 +191,37 @@ export default function Segments() {
                 {segments[active].desc}
               </p>
             </motion.div>
+
+            {/* ===== Scroll To View Button ===== */}
+            {active < segments.length - 1 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
+              >
+                <button
+                  onClick={handleScrollNext}
+                  className="flex flex-col items-center text-white text-sm font-medium tracking-wide"
+                >
+                  <span className="opacity-80 hover:opacity-100 transition">
+                    Scroll to View More
+                  </span>
+
+                  <motion.div
+                    animate={{ y: [0, 8, 0] }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 1.5,
+                      ease: "easeInOut"
+                    }}
+                    className="mt-2 text-lg"
+                  >
+                    ↓
+                  </motion.div>
+                </button>
+              </motion.div>
+            )}
 
           </motion.div>
         </AnimatePresence>
