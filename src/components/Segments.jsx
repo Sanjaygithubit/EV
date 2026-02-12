@@ -7,7 +7,7 @@ const segments = [
   {
     title: "EV Bike Spare Parts",
     desc: "Batteries, chargers, displays & motors",
-    bgImage: "/images/bike.jpg"
+    bgImage: "/images/bg-bike.jpg"
   },
   {
     title: "EV Rickshaw Spare Parts",
