@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { fadeUp } from "../utils/animations";
-import whyImg from "../assets/why-choose-us.jpg";
+import whyImg from "../assets/why.jpg";
 import CheckIcon from "./icons/CheckIcon";
 
 export default function WhyChooseUs() {
@@ -18,9 +18,10 @@ export default function WhyChooseUs() {
           viewport={{ once: true }}
           className="grid md:grid-cols-2 items-center gap-16"
         >
+
           {/* LEFT CONTENT */}
           <div>
-            <h2 className="text-[46px] md:text-[42px] font-bold mb-10">
+            <h2 className="text-4xl md:text-5xl font-bold mb-10">
               Why Choose Us
             </h2>
 
@@ -46,10 +47,10 @@ export default function WhyChooseUs() {
                 <li key={i} className="flex gap-4 items-start">
                   <CheckIcon />
                   <div>
-                    <p className="font-semibold text-[20px]">
+                    <p className="font-semibold text-lg md:text-xl">
                       {item.title}
                     </p>
-                    <p className="text-[18px] text-muted">
+                    <p className="text-base md:text-lg text-muted">
                       {item.desc}
                     </p>
                   </div>
@@ -59,13 +60,31 @@ export default function WhyChooseUs() {
           </div>
 
           {/* RIGHT IMAGE */}
-          <motion.div style={{ y }} className="relative">
-            <img
-              src={whyImg}
-              alt="Why choose us"
-              className="w-full h-[340px] md:h-[400px] object-cover rounded-2xl shadow-xl"
-            />
-          </motion.div>
+         <motion.div
+  style={{ y }}
+  className="
+    relative
+    w-full
+    flex
+    justify-center
+  "
+>
+ <img
+  src={whyImg}
+  alt="Why choose us"
+  className="
+    w-full
+    max-w-[600px]
+    h-[420px]
+    object-cover
+    rounded-2xl
+    shadow-xl
+  "
+/>
+
+</motion.div>
+
+
         </motion.div>
       </div>
     </section>

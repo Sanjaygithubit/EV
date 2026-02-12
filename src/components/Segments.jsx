@@ -7,7 +7,7 @@ const segments = [
   {
     title: "EV Bike Spare Parts",
     desc: "Batteries, chargers, displays & motors",
-    bgImage: "/images/bg-bike.jpg"
+    bgImage: "/images/bike.jpg"
   },
   {
     title: "EV Rickshaw Spare Parts",
@@ -39,33 +39,69 @@ const segments = [
 export default function Segments() {
   const sectionRef = useRef(null);
   const navigate = useNavigate();
-
   const [active, setActive] = useState(0);
-  const [isManualScroll, setIsManualScroll] = useState(false);
 
-  /* ===============================
-     SCROLL → CARD CHANGE
-  =============================== */
+  const isMobile =
+    typeof window !== "undefined" && window.innerWidth < 768;
+
+  /* ==============================
+     📱 MOBILE — SIMPLE CARDS
+  ============================== */
+  if (isMobile) {
+    return (
+      <section className="py-16 bg-light">
+        <h2 className="text-2xl font-bold px-6 mb-8">
+          EV Segments We Serve
+        </h2>
+
+        <div className="flex flex-col gap-8 px-6">
+          {segments.map((seg, i) => (
+            <motion.div
+              key={i}
+              whileTap={{ scale: 0.97 }}
+              onClick={() =>
+                navigate(`/products?category=${encodeURIComponent(seg.title)}`)
+              }
+              className="relative rounded-3xl overflow-hidden cursor-pointer h-[220px]"
+            >
+              {/* Background with pixel control */}
+              <div
+                className="absolute inset-0 bg-center bg-no-repeat"
+                style={{
+                  backgroundImage: `url(${seg.bgImage})`,
+                  backgroundSize: "900px 600px"
+                }}
+              />
+
+              <div className="absolute inset-0 bg-black/60" />
+
+              <div className="relative z-10 p-6 text-white">
+                <h3 className="text-xl font-semibold mb-2">
+                  {seg.title}
+                </h3>
+                <p className="text-sm text-gray-200">
+                  {seg.desc}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  /* ==============================
+     🖥 DESKTOP — SCROLL SECTIONS
+  ============================== */
+
   useEffect(() => {
     const onScroll = () => {
-      if (!sectionRef.current || isManualScroll) return;
+      if (!sectionRef.current) return;
 
-      const section = sectionRef.current;
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
+      const sectionTop = sectionRef.current.offsetTop;
       const scrollY = window.scrollY;
-
-      if (
-        scrollY < sectionTop ||
-        scrollY > sectionTop + sectionHeight
-      ) {
-        return;
-      }
-
-      const scrollInside = scrollY - sectionTop;
-      const newIndex = Math.floor(
-        scrollInside / window.innerHeight
-      );
+      const progress = (scrollY - sectionTop) / window.innerHeight;
+      const newIndex = Math.floor(progress);
 
       setActive(
         Math.max(0, Math.min(newIndex, segments.length - 1))
@@ -74,33 +110,7 @@ export default function Segments() {
 
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isManualScroll]);
-
-  /* ===============================
-     ARROW CLICK → NEXT CARD
-  =============================== */
-  const handleArrowClick = (e) => {
-    e.stopPropagation();
-
-    if (active < segments.length - 1) {
-      const nextIndex = active + 1;
-
-      setIsManualScroll(true); // prevent scroll override
-      setActive(nextIndex);
-
-      const sectionTop = sectionRef.current.offsetTop;
-
-      window.scrollTo({
-        top: sectionTop + nextIndex * window.innerHeight,
-        behavior: "smooth"
-      });
-
-      // re-enable scroll listener after animation
-      setTimeout(() => {
-        setIsManualScroll(false);
-      }, 700);
-    }
-  };
+  }, []);
 
   return (
     <section
@@ -110,7 +120,7 @@ export default function Segments() {
     >
       <div className="sticky top-0 h-screen flex items-center justify-center">
 
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="wait">
           <motion.div
             key={active}
             initial={{ opacity: 0, y: 120, scale: 0.96 }}
@@ -139,18 +149,19 @@ export default function Segments() {
               px-24
             "
           >
-            {/* BACKGROUND IMAGE */}
+            {/* Background Image with pixel control */}
             <div
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0 bg-center bg-no-repeat"
               style={{
-                backgroundImage: `url(${segments[active].bgImage})`
+                backgroundImage: `url(${segments[active].bgImage})`,
+                backgroundSize: "1600px 900px"
               }}
             />
 
-            {/* DARK OVERLAY */}
+            {/* Dark Overlay */}
             <div className="absolute inset-0 bg-black/60" />
 
-            {/* RIGHT SIDE TEXT */}
+            {/* Right Text */}
             <motion.div
               initial={{ x: 60, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -169,42 +180,6 @@ export default function Segments() {
                 {segments[active].desc}
               </p>
             </motion.div>
-
-            {/* SCROLL BUTTON (HIDE ON LAST CARD) */}
-            {active < segments.length - 1 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50"
-              >
-                <button
-                  onClick={handleArrowClick}
-                  className="
-                    flex flex-col items-center
-                    text-white text-sm font-medium
-                    tracking-wide
-                    group
-                  "
-                >
-                  <span className="opacity-80 group-hover:opacity-100 transition">
-                    Scroll to View More
-                  </span>
-
-                  <motion.div
-                    animate={{ y: [0, 8, 0] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 1.5,
-                      ease: "easeInOut"
-                    }}
-                    className="mt-2 text-lg"
-                  >
-                    ↓
-                  </motion.div>
-                </button>
-              </motion.div>
-            )}
 
           </motion.div>
         </AnimatePresence>
