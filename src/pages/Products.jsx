@@ -21,10 +21,12 @@ const categories = [
 
 /* SUB CATEGORIES */
 const subCategories = {
-  "EV Rickshaw": ["Motor", "Controller", "Accessories"],
-  "EV Bike Spare Parts": ["Motor", "Controller", "Display"],
+  "EV Rickshaw": ["Motor", "Controller", "Gear Box", "Battery", "Charger"],
+  "EV Bike Spare Parts": ["Motor", "Controller", "Brake", "Display"],
+  "EV Bicycle Conversion Kit": ["Bicycle Kit"],
+  "EV Conversion Kit": ["Scooter Kit", "Bike Kit"],
   "EV Batteries": ["Lithium", "Lead Acid"],
-  "EV Charger": ["Fast Charger", "Normal Charger"]
+  "EV Charger": ["Lithium Charger", "Lead Acid Charger"]
 };
 
 export default function Products() {
@@ -36,10 +38,11 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
 
-  /* 🔥 REF FOR SCROLL */
+  /* 🔥 PREMIUM CONTROL */
+  const [userAction, setUserAction] = useState(false);
   const productsRef = useRef(null);
 
-  /* 🔥 SYNC URL */
+  /* URL SYNC */
   useEffect(() => {
     if (categoryFromUrl && categories.includes(categoryFromUrl)) {
       setActiveCategory(categoryFromUrl);
@@ -47,33 +50,36 @@ export default function Products() {
     }
   }, [categoryFromUrl]);
 
-  /* 🔥 SCROLL TO PRODUCTS (DESKTOP + MOBILE) */
+  /* 🔥 SMOOTH SCROLL (NO JUMP) */
   useEffect(() => {
-    if (productsRef.current) {
-      productsRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+    if (!userAction || !productsRef.current) return;
 
-      // offset for sticky navbar
-      setTimeout(() => {
-        window.scrollBy({
-          top: -80,
-          behavior: "smooth"
-        });
-      }, 200);
-    }
+    const timer = setTimeout(() => {
+      const yOffset = -80;
+
+      const y =
+        productsRef.current.getBoundingClientRect().top +
+        window.pageYOffset +
+        yOffset;
+
+      window.scrollTo({
+        top: y,
+        behavior: "smooth"
+      });
+    }, 120);
+
+    return () => clearTimeout(timer);
   }, [activeCategory, activeSub]);
 
-  /* 🔥 FILTER */
+  /* FILTER LOGIC */
   const filteredProducts = products.filter((p) => {
-    const categoryMatch =
+    const catMatch =
       activeCategory === "All" || p.category === activeCategory;
 
     const subMatch =
       !activeSub || p.sub === activeSub;
 
-    return categoryMatch && subMatch;
+    return catMatch && subMatch;
   });
 
   return (
@@ -94,19 +100,24 @@ export default function Products() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8 px-4 lg:px-8">
 
-          {/* SIDEBAR DESKTOP */}
+          {/* SIDEBAR (DESKTOP) */}
           <div className="hidden lg:block">
             <div className="sticky top-24">
-
               <CategorySidebar
                 categories={categories}
                 subCategories={subCategories}
                 activeCategory={activeCategory}
-                setActiveCategory={setActiveCategory}
+                setActiveCategory={(cat) => {
+                  setActiveCategory(cat);
+                  setActiveSub(null);
+                  setUserAction(true);
+                }}
                 activeSub={activeSub}
-                setActiveSub={setActiveSub}
+                setActiveSub={(sub) => {
+                  setActiveSub(sub);
+                  setUserAction(true);
+                }}
               />
-
             </div>
           </div>
 
@@ -121,15 +132,31 @@ export default function Products() {
                 No products found
               </p>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
-                  <ProductCard
+              <motion.div
+                key={activeCategory + activeSub}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              >
+                {filteredProducts.map((product, index) => (
+                  <motion.div
                     key={product.id}
-                    product={product}
-                    onClick={() => setSelectedProduct(product)}
-                  />
+                   
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      delay: index * 0.05,
+                      duration: 0.3
+                    }}
+                  >
+                    <ProductCard
+                      product={product}
+                      onClick={() => setSelectedProduct(product)}
+                    />
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             )}
           </div>
 
@@ -140,7 +167,6 @@ export default function Products() {
       <AnimatePresence>
         {showFilters && (
           <>
-            {/* BACKDROP */}
             <motion.div
               className="fixed inset-0 bg-black/50 z-40"
               onClick={() => setShowFilters(false)}
@@ -149,68 +175,54 @@ export default function Products() {
               exit={{ opacity: 0 }}
             />
 
-            {/* DRAWER */}
             <motion.div
               className="
                 fixed bottom-0 left-0 right-0
-                bg-white z-50
-                rounded-t-3xl
-                max-h-[85vh]
-                flex flex-col
+                bg-white z-50 rounded-t-3xl
+                max-h-[85vh] flex flex-col
               "
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
             >
-              {/* HEADER */}
-              <div className="flex items-center justify-between px-5 py-4 border-b">
-                <h3 className="font-semibold text-lg">Filters</h3>
-                <button
-                  onClick={() => setShowFilters(false)}
-                  className="text-gray-500 text-xl"
-                >
-                  ✕
-                </button>
+              <div className="flex justify-between px-5 py-4 border-b">
+                <h3 className="font-semibold">Filters</h3>
+                <button onClick={() => setShowFilters(false)}>✕</button>
               </div>
 
-              {/* CONTENT */}
               <div className="overflow-y-auto px-5 py-4 flex-1">
 
                 {/* CATEGORY */}
                 <div className="mb-6">
-                  <h4 className="text-sm font-semibold mb-3 text-gray-500 uppercase">
+                  <h4 className="text-sm mb-3 text-gray-500 uppercase">
                     Categories
                   </h4>
 
-                  <div className="flex flex-col gap-2">
-                    {categories.map((cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => {
-                          setActiveCategory(cat);
-                          setActiveSub(null);
-                          setShowFilters(false); // 🔥 close drawer
-                        }}
-                        className={`
-                          text-left px-4 py-2 rounded-xl text-sm
-                          ${
-                            activeCategory === cat
-                              ? "bg-primary text-white"
-                              : "bg-gray-100 text-gray-600"
-                          }
-                        `}
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </div>
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setActiveCategory(cat);
+                        setActiveSub(null);
+                        setUserAction(true);
+                        setShowFilters(false);
+                      }}
+                      className={`block w-full text-left px-4 py-2 rounded-xl mb-2 ${
+                        activeCategory === cat
+                          ? "bg-primary text-white"
+                          : "bg-gray-100"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
                 </div>
 
                 {/* SUB CATEGORY */}
                 {activeCategory !== "All" &&
                   subCategories[activeCategory] && (
                     <div>
-                      <h4 className="text-sm font-semibold mb-3 text-gray-500 uppercase">
+                      <h4 className="text-sm mb-3 text-gray-500 uppercase">
                         Sub Categories
                       </h4>
 
@@ -220,16 +232,14 @@ export default function Products() {
                             key={sub}
                             onClick={() => {
                               setActiveSub(sub);
-                              setShowFilters(false); // 🔥 close drawer
+                              setUserAction(true);
+                              setShowFilters(false);
                             }}
-                            className={`
-                              px-3 py-1.5 rounded-full text-sm
-                              ${
-                                activeSub === sub
-                                  ? "bg-primary text-white"
-                                  : "bg-gray-100 text-gray-600"
-                              }
-                            `}
+                            className={`px-3 py-1.5 rounded-full text-sm ${
+                              activeSub === sub
+                                ? "bg-primary text-white"
+                                : "bg-gray-100"
+                            }`}
                           >
                             {sub}
                           </button>
@@ -237,7 +247,6 @@ export default function Products() {
                       </div>
                     </div>
                   )}
-
               </div>
             </motion.div>
           </>
