@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import heroBg from "../assets/hero.jpg";
+import heroDesktop from "../assets/hero-desktop.jpg";
+import heroMobile from "../assets/hero-mobile.jpg";
 
 /* LINE ANIMATION */
 const lineAnim = {
@@ -26,22 +27,23 @@ export default function Hero() {
   const isMobile =
     typeof window !== "undefined" && window.innerWidth < 768;
 
+  /* ✅ Choose image based on device */
+  const bgImage = isMobile ? heroMobile : heroDesktop;
+
   return (
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{
-        backgroundImage: `url(${heroBg})`,
+        backgroundImage: `url(${bgImage})`,
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundSize: isMobile
-          ? "900px 700px"      // 📱 Mobile size
-          : "1600px 900px"     // 🖥 Desktop size
+        backgroundSize: "cover" // ✅ IMPORTANT FIX
       }}
     >
-      {/* SOFT EV GREEN GLOW */}
+      {/* GLOW */}
       <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-primary/30 rounded-full blur-[120px]" />
 
-      {/* DARK OVERLAY */}
+      {/* OVERLAY */}
       <div className="absolute inset-0 bg-navy/80" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 grid md:grid-cols-[1.3fr_0.7fr] gap-16">

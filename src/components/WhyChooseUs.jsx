@@ -75,7 +75,7 @@ export default function WhyChooseUs() {
   className="
     w-full
     max-w-[600px]
-    h-[420px]
+    aspect-[3/2]
     object-cover
     rounded-2xl
     shadow-xl
