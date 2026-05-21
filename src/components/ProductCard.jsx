@@ -24,11 +24,16 @@ export default function ProductCard({ product, onClick }) {
        <img
   src={product.image}
   alt={product.name}
-  className="
-    h-full w-full object-cover
-    transition-transform duration-500 ease-out
-    group-hover:scale-[1.04]
-  "
+ className="
+  h-full
+  w-full
+  object-contain
+  p-3
+  transition-transform
+  duration-500
+  ease-out
+  group-hover:scale-[1.04]
+"
 />
 
       </div>

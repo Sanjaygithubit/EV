@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 export default function ProductModal({ product, onClose }) {
 
-  /* 🔥 CONTROL BODY SCROLL SAFELY */
+  /* 🔥 LOCK BODY SCROLL */
   useEffect(() => {
     if (product) {
       document.body.style.overflow = "hidden";
@@ -21,89 +21,225 @@ export default function ProductModal({ product, onClose }) {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[9999] flex items-center justify-center px-4"
+        className="
+          fixed inset-0 z-[9999]
+          flex items-center justify-center
+          px-4 py-6
+        "
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        {/* 🔥 BLUR BACKDROP */}
+
+        {/* 🔥 BACKDROP */}
         <div
-          className="absolute inset-0 bg-black/50 backdrop-blur-lg"
+          className="
+            absolute inset-0
+            bg-black/50
+            backdrop-blur-md
+          "
           onClick={onClose}
         />
 
-        {/* 🔥 MODAL CARD */}
+        {/* 🔥 MODAL */}
         <motion.div
           initial={{ scale: 0.96, opacity: 0, y: 30 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.96, opacity: 0, y: 30 }}
-          transition={{ type: "spring", stiffness: 260, damping: 22 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 22
+          }}
           className="
             relative
             bg-white
             rounded-3xl
             w-full
             max-w-4xl
-            max-h-[85vh]
-            overflow-hidden
-            shadow-2xl
+            max-h-[90vh]
+            overflow-y-auto
+            shadow-[0_30px_80px_rgba(0,0,0,0.25)]
             z-10
+
+            scrollbar-thin
+            scrollbar-thumb-gray-300
+            scrollbar-track-transparent
           "
         >
-          {/* CLOSE */}
+
+          {/* CLOSE BUTTON */}
           <button
             onClick={onClose}
-            className="absolute top-5 right-6 text-gray-400 hover:text-gray-700 text-2xl"
+            className="
+              absolute top-5 right-6
+              text-gray-400
+              hover:text-black
+              text-3xl
+              transition
+              z-20
+            "
           >
             ✕
           </button>
 
-          <div className="overflow-y-auto max-h-[85vh] p-8">
+          {/* CONTENT */}
+          <div className="p-6 md:p-8">
 
-            <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+            {/* CATEGORY */}
+            <span
+              className="
+                inline-block
+                mb-4
+                px-4 py-1.5
+                rounded-full
+                text-xs
+                font-semibold
+                bg-primary/10
+                text-primary
+              "
+            >
               {product.category}
             </span>
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            {/* TITLE */}
+            <h2
+              className="
+                text-2xl
+                md:text-4xl
+                font-bold
+                text-gray-900
+                leading-tight
+                mb-6
+              "
+            >
               {product.name}
             </h2>
 
+            {/* 🔥 PRODUCT IMAGE */}
             {product.image && (
-              <div className="mb-8 rounded-xl overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-64 object-cover rounded-xl"
-                />
+              <div className="mb-8">
+
+                <div
+                  className="
+                    w-full
+                    h-[260px]
+                    md:h-[420px]
+
+                    rounded-2xl
+                    overflow-hidden
+
+                    bg-gradient-to-b
+                    from-gray-50
+                    to-white
+
+                    border border-gray-100
+
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="
+                      max-h-full
+                      max-w-full
+                      object-contain
+                      p-4
+                    "
+                  />
+                </div>
+
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            {/* BUTTONS */}
+            <div
+              className="
+                flex flex-col
+                sm:flex-row
+                gap-4
+                mb-8
+              "
+            >
+
+              {/* WHATSAPP */}
               <a
                 href={`https://wa.me/91XXXXXXXXXX?text=I'm interested in ${product.name}`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 bg-primary text-white text-center py-2.5 text-sm rounded-xl font-medium hover:bg-primary/90 transition"
+                className="
+                  flex-1
+                  bg-primary
+                  text-white
+                  text-center
+                  py-3
+                  rounded-2xl
+                  font-medium
+                  transition-all
+                  hover:scale-[1.01]
+                  hover:shadow-lg
+                "
               >
                 WhatsApp Enquiry
               </a>
 
-              <button className="flex-1 border border-gray-300 py-2.5 text-sm rounded-xl font-medium hover:bg-gray-100 transition">
+              {/* ENQUIRY */}
+              <button
+                className="
+                  flex-1
+                  border border-gray-300
+                  py-3
+                  rounded-2xl
+                  font-medium
+                  transition-all
+                  hover:bg-gray-100
+                "
+              >
                 Submit Enquiry
               </button>
+
             </div>
 
-            <div className="mb-6">
-              <h4 className="font-semibold mb-2">Specifications</h4>
-              <p className="text-gray-600 text-sm">{product.specs}</p>
+            {/* SPECIFICATIONS */}
+            <div className="mb-8">
+              <h4 className="text-lg font-semibold mb-3">
+                Specifications
+              </h4>
+
+              <div
+                className="
+                  bg-gray-50
+                  rounded-2xl
+                  p-5
+                  text-gray-700
+                  leading-relaxed
+                "
+              >
+                {product.specs}
+              </div>
             </div>
 
+            {/* DESCRIPTION */}
             <div>
-              <h4 className="font-semibold mb-2">Description</h4>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <h4 className="text-lg font-semibold mb-3">
+                Description
+              </h4>
+
+              <div
+                className="
+                  bg-gray-50
+                  rounded-2xl
+                  p-5
+                  text-gray-700
+                  leading-relaxed
+                "
+              >
                 {product.description ||
-                  "High-quality EV spare part designed for durability and performance."}
-              </p>
+                  "High-quality EV spare part designed for durability, efficiency, and long-term performance."}
+              </div>
             </div>
 
           </div>
