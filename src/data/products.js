@@ -52,16 +52,19 @@ const products = [
   },
 
   { id: 9, name: "Rear Brake Drum (160mm / 180mm)", category: "EV Rickshaw", sub: "Rear Axle",
+    image:"/products/electric-tricycle-160-brake-drum-1000x1000.jpg",
     description: "Reliable braking component for safety and control.",
     specs: "Size: 160mm / 180mm"
   },
 
   { id: 10, name: "Rear Brake Cam", category: "EV Rickshaw", sub: "Rear Axle",
+    image:"/products/rear cam.png",
     description: "Brake cam ensuring smooth brake operation.",
     specs: "Heavy-duty material"
   },
 
   { id: 11, name: "Rear Shaft Sizes (17–21.5)", category: "EV Rickshaw", sub: "Rear Axle",
+    image:"/products/rear shaft.png",
     description: "Multiple size shaft options for compatibility.",
     specs: "Sizes: 17, 17.5, 18, 18.5, 21, 21.5"
   },

@@ -8,7 +8,10 @@ const lineAnim = {
     y: 0,
     opacity: 1,
     filter: "blur(0px)",
-    transition: { duration: 0.8, ease: "easeOut" }
+    transition: {
+      duration: 0.8,
+      ease: "easeOut"
+    }
   }
 };
 
@@ -17,27 +20,40 @@ const fadeItem = {
   visible: {
     y: 0,
     opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut" }
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
   }
 };
 
 export default function Hero() {
   return (
-    <section
-      className="relative min-h-screen flex items-center overflow-hidden"
-      style={{
-        backgroundImage: `url(${heroBg})`,
-        backgroundPosition: "center center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover"
-      }}
-    >
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      
+      {/* BACKGROUND IMAGE */}
+      <div
+        className="absolute inset-0 bg-cover bg-center scale-105"
+        style={{
+          backgroundImage: `url(${heroBg})`
+        }}
+      />
+
+      {/* PREMIUM OVERLAY */}
+      <div
+        className="
+          absolute inset-0
+          bg-gradient-to-r
+          from-black/70
+          via-black/40
+          to-black/10
+        "
+      />
+
       {/* GREEN GLOW */}
       <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-primary/30 rounded-full blur-[120px]" />
 
-      {/* DARK OVERLAY */}
-      <div className="absolute inset-0 bg-navy/80" />
-
+      {/* CONTENT */}
       <div
         className="
           relative z-10
@@ -45,10 +61,15 @@ export default function Hero() {
           px-6
           grid md:grid-cols-[1.3fr_0.7fr]
           gap-16
+          w-full
         "
       >
-        {/* LEFT CONTENT */}
-        <motion.div initial="hidden" animate="visible">
+        {/* LEFT SIDE */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          className="max-w-3xl"
+        >
           <motion.h1
             variants={lineAnim}
             className="
@@ -59,7 +80,6 @@ export default function Hero() {
               font-extrabold
               text-white
               leading-[1.1]
-              max-w-3xl
             "
           >
             Your Trusted{" "}
@@ -85,17 +105,14 @@ export default function Hero() {
 
           <motion.h2
             variants={lineAnim}
-            transition={{ delay: 0.15 }}
             className="
-              mt-4
+              mt-5
               text-xl
               sm:text-2xl
               md:text-3xl
-              lg:text-4xl
-              font-semibold
               text-slate-200
-              leading-tight
-              max-w-2xl
+              font-medium
+              leading-relaxed
             "
           >
             Genuine Stock • Dealer Pricing • Fast Fulfilment
@@ -103,7 +120,6 @@ export default function Hero() {
 
           <motion.div
             variants={fadeItem}
-            transition={{ delay: 0.5 }}
             className="
               mt-10
               flex flex-col sm:flex-row
@@ -113,28 +129,30 @@ export default function Hero() {
             <a
               href="#quick-enquiry"
               className="
-                relative overflow-hidden
-                bg-primary text-white
-                px-6 py-3 rounded-xl
-                font-medium text-center
-                after:absolute after:inset-0
-                after:bg-white/10
-                after:translate-x-[-100%]
-                hover:after:translate-x-0
-                after:transition after:duration-300
+                bg-primary
+                text-white
+                px-8 py-4
+                rounded-xl
+                font-semibold
+                text-center
+                shadow-lg
+                hover:scale-105
+                transition
               "
             >
-              <span className="relative z-10">
-                Get In Touch
-              </span>
+              Get In Touch
             </a>
 
             <a
               href="/products"
               className="
                 border border-white/40
-                px-6 py-3 rounded-xl
-                text-white text-center
+                text-white
+                px-8 py-4
+                rounded-xl
+                font-semibold
+                text-center
+                backdrop-blur-md
                 hover:bg-white/10
                 transition
               "
@@ -144,102 +162,114 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
-        {/* RIGHT FORM */}
-        <motion.div
-          id="quick-enquiry"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="
-            hidden md:flex
-            flex-col
-            self-center
+      <motion.div
+  id="quick-enquiry"
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.4, duration: 0.6 }}
+  className="
+    hidden md:flex
+    flex-col
+    self-center
 
-            bg-gradient-to-b
-            from-primary/30
-            via-white/20
-            to-white/10
+    bg-black/15
+    backdrop-blur-md
 
-            backdrop-blur-xl
-            border border-white/30
+    border border-white/20
+    rounded-3xl
 
-            rounded-3xl
-            p-8
+    p-8
 
-            shadow-2xl
+    shadow-[0_20px_60px_rgba(0,0,0,0.25)]
 
-            w-[380px]
-            h-[450px]
-          "
-        >
-          <h3 className="font-semibold text-lg mb-5 text-white">
-            Get Expert Callback
-          </h3>
+    w-[380px]
+    h-[450px]
+  "
+>
+  <h3 className="font-semibold text-xl mb-5 text-white">
+    Get Expert Callback
+  </h3>
 
-          <input
-            className="
-              w-full
-              bg-white/80
-              border border-white/40
-              p-3 mb-4
-              rounded-xl
-              text-sm
-              focus:outline-none
-              focus:ring-2
-              focus:ring-primary
-            "
-            placeholder="Name"
-          />
+  <input
+    className="
+      w-full
+      bg-white/15
+      text-white
+      placeholder:text-gray-300
 
-          <input
-            className="
-              w-full
-              bg-white/80
-              border border-white/40
-              p-3 mb-4
-              rounded-xl
-              text-sm
-              focus:outline-none
-              focus:ring-2
-              focus:ring-primary
-            "
-            placeholder="Phone"
-          />
+      border border-white/20
+      p-3 mb-4
 
-          <textarea
-            rows="3"
-            className="
-              w-full
-              bg-white/80
-              border border-white/40
-              p-3
-              rounded-xl
-              text-sm
-              resize-none
-              focus:outline-none
-              focus:ring-2
-              focus:ring-primary
-            "
-            placeholder="Requirement"
-          />
+      rounded-xl
 
-          <button
-            className="
-              mt-6
-              w-full
-              bg-primary
-              text-white
-              py-3
-              rounded-xl
-              font-medium
-              transition
-              hover:scale-[1.02]
-              hover:shadow-lg
-            "
-          >
-            Submit
-          </button>
-        </motion.div>
+      focus:outline-none
+      focus:ring-2
+      focus:ring-primary
+    "
+    placeholder="Name"
+  />
+
+  <input
+    className="
+      w-full
+      bg-white/15
+      text-white
+      placeholder:text-gray-300
+
+      border border-white/20
+      p-3 mb-4
+
+      rounded-xl
+
+      focus:outline-none
+      focus:ring-2
+      focus:ring-primary
+    "
+    placeholder="Phone"
+  />
+
+  <textarea
+    rows="4"
+    className="
+      w-full
+      bg-white/15
+      text-white
+      placeholder:text-gray-300
+
+      border border-white/20
+      p-3
+
+      rounded-xl
+      resize-none
+
+      focus:outline-none
+      focus:ring-2
+      focus:ring-primary
+    "
+    placeholder="Requirement"
+  />
+
+  <button
+    className="
+      mt-6
+      w-full
+
+      bg-primary
+      text-white
+
+      py-3
+      rounded-xl
+
+      font-semibold
+
+      transition
+      hover:scale-[1.02]
+      hover:shadow-lg
+    "
+  >
+    Submit
+  </button>
+</motion.div>
       </div>
     </section>
   );
