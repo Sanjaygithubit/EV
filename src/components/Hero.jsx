@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import heroDesktop from "../assets/hero-desktop.jpg";
-import heroMobile from "../assets/hero-mobile.jpg";
+import heroBg from "../assets/hero.jpg";
 
 /* LINE ANIMATION */
 const lineAnim = {
@@ -23,37 +22,45 @@ const fadeItem = {
 };
 
 export default function Hero() {
-
-  const isMobile =
-    typeof window !== "undefined" && window.innerWidth < 768;
-
-  /* ✅ Choose image based on device */
-  const bgImage = isMobile ? heroMobile : heroDesktop;
-
   return (
     <section
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{
-        backgroundImage: `url(${bgImage})`,
-        backgroundPosition: "center",
+        backgroundImage: `url(${heroBg})`,
+        backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",
-        backgroundSize: "cover" // ✅ IMPORTANT FIX
+        backgroundSize: "cover"
       }}
     >
-      {/* GLOW */}
+      {/* GREEN GLOW */}
       <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-primary/30 rounded-full blur-[120px]" />
 
-      {/* OVERLAY */}
+      {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-navy/80" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 grid md:grid-cols-[1.3fr_0.7fr] gap-16">
-
+      <div
+        className="
+          relative z-10
+          max-w-7xl mx-auto
+          px-6
+          grid md:grid-cols-[1.3fr_0.7fr]
+          gap-16
+        "
+      >
         {/* LEFT CONTENT */}
         <motion.div initial="hidden" animate="visible">
-
           <motion.h1
             variants={lineAnim}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] max-w-3xl"
+            className="
+              text-4xl
+              sm:text-5xl
+              md:text-6xl
+              lg:text-7xl
+              font-extrabold
+              text-white
+              leading-[1.1]
+              max-w-3xl
+            "
           >
             Your Trusted{" "}
             <motion.span
@@ -79,7 +86,17 @@ export default function Hero() {
           <motion.h2
             variants={lineAnim}
             transition={{ delay: 0.15 }}
-            className="mt-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-slate-200 leading-tight max-w-2xl"
+            className="
+              mt-4
+              text-xl
+              sm:text-2xl
+              md:text-3xl
+              lg:text-4xl
+              font-semibold
+              text-slate-200
+              leading-tight
+              max-w-2xl
+            "
           >
             Genuine Stock • Dealer Pricing • Fast Fulfilment
           </motion.h2>
@@ -87,18 +104,40 @@ export default function Hero() {
           <motion.div
             variants={fadeItem}
             transition={{ delay: 0.5 }}
-            className="mt-10 flex gap-4"
+            className="
+              mt-10
+              flex flex-col sm:flex-row
+              gap-4
+            "
           >
             <a
               href="#quick-enquiry"
-              className="relative overflow-hidden bg-primary text-white px-6 py-3 rounded-lg font-medium after:absolute after:inset-0 after:bg-white/10 after:translate-x-[-100%] hover:after:translate-x-0 after:transition after:duration-300"
+              className="
+                relative overflow-hidden
+                bg-primary text-white
+                px-6 py-3 rounded-xl
+                font-medium text-center
+                after:absolute after:inset-0
+                after:bg-white/10
+                after:translate-x-[-100%]
+                hover:after:translate-x-0
+                after:transition after:duration-300
+              "
             >
-              <span className="relative z-10">Get In Touch</span>
+              <span className="relative z-10">
+                Get In Touch
+              </span>
             </a>
 
             <a
               href="/products"
-              className="border border-white/40 px-6 py-3 rounded-lg text-white hover:bg-white/10 transition"
+              className="
+                border border-white/40
+                px-6 py-3 rounded-xl
+                text-white text-center
+                hover:bg-white/10
+                transition
+              "
             >
               View Products
             </a>
@@ -111,33 +150,96 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
-          className="hidden md:flex flex-col self-center bg-gradient-to-b from-primary/30 via-white/20 to-white/10 backdrop-blur-xl border border-white/30 rounded-3xl p-8 shadow-2xl w-[380px] h-[450px]"
+          className="
+            hidden md:flex
+            flex-col
+            self-center
+
+            bg-gradient-to-b
+            from-primary/30
+            via-white/20
+            to-white/10
+
+            backdrop-blur-xl
+            border border-white/30
+
+            rounded-3xl
+            p-8
+
+            shadow-2xl
+
+            w-[380px]
+            h-[450px]
+          "
         >
           <h3 className="font-semibold text-lg mb-5 text-white">
             Get Expert Callback
           </h3>
 
           <input
-            className="w-full bg-white/80 border border-white/40 p-3 mb-4 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="
+              w-full
+              bg-white/80
+              border border-white/40
+              p-3 mb-4
+              rounded-xl
+              text-sm
+              focus:outline-none
+              focus:ring-2
+              focus:ring-primary
+            "
             placeholder="Name"
           />
 
           <input
-            className="w-full bg-white/80 border border-white/40 p-3 mb-4 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="
+              w-full
+              bg-white/80
+              border border-white/40
+              p-3 mb-4
+              rounded-xl
+              text-sm
+              focus:outline-none
+              focus:ring-2
+              focus:ring-primary
+            "
             placeholder="Phone"
           />
 
           <textarea
             rows="3"
-            className="w-full bg-white/80 border border-white/40 p-3 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+            className="
+              w-full
+              bg-white/80
+              border border-white/40
+              p-3
+              rounded-xl
+              text-sm
+              resize-none
+              focus:outline-none
+              focus:ring-2
+              focus:ring-primary
+            "
             placeholder="Requirement"
           />
 
-          <button className="mt-6 w-full bg-primary text-white py-3 rounded-xl font-medium transition hover:scale-[1.02] hover:shadow-lg">
+          <button
+            className="
+              mt-6
+              w-full
+              bg-primary
+              text-white
+              py-3
+              rounded-xl
+              font-medium
+              transition
+              hover:scale-[1.02]
+              hover:shadow-lg
+            "
+          >
             Submit
           </button>
         </motion.div>
-
       </div>
     </section>
   );
