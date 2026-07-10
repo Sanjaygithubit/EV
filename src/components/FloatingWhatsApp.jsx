@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
+import { SITE_CONFIG } from "../config/site";
 
 export default function FloatingWhatsApp() {
+  const whatsappUrl = SITE_CONFIG.social.whatsapp;
+
   return (
     <motion.a
-      href="https://wa.me/919XXXXXXXXX"
+      href={whatsappUrl}
       target="_blank"
       rel="noreferrer"
       initial={{ scale: 0 }}
@@ -22,6 +25,7 @@ export default function FloatingWhatsApp() {
         flex items-center justify-center
         shadow-lg
       "
+      aria-label="Chat on WhatsApp"
     >
       {/* Pulse Ring */}
       <span className="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-40 animate-ping"></span>

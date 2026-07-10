@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { SITE_CONFIG } from "../config/site";
 import heroBg from "../assets/hero.jpg";
 
 /* LINE ANIMATION */
@@ -28,6 +29,8 @@ const fadeItem = {
 };
 
 export default function Hero() {
+  const whatsappUrl = SITE_CONFIG.social.whatsapp;
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       
@@ -115,7 +118,7 @@ export default function Hero() {
               leading-relaxed
             "
           >
-            Genuine Stock • Dealer Pricing • Fast Fulfilment
+            {SITE_CONFIG.description}
           </motion.h2>
 
           <motion.div
@@ -249,7 +252,10 @@ export default function Hero() {
     placeholder="Requirement"
   />
 
-  <button
+  <a
+    href={whatsappUrl}
+    target="_blank"
+    rel="noreferrer"
     className="
       mt-6
       w-full
@@ -265,10 +271,11 @@ export default function Hero() {
       transition
       hover:scale-[1.02]
       hover:shadow-lg
+      text-center
     "
   >
     Submit
-  </button>
+  </a>
 </motion.div>
       </div>
     </section>

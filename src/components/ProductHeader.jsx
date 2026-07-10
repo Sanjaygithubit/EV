@@ -1,3 +1,5 @@
+import { SITE_CONFIG } from "../config/site";
+
 export default function ProductHeader() {
   return (
     <section className="bg-gradient-to-r from-[#0b0f1a] to-[#10152b] py-14">
@@ -6,7 +8,7 @@ export default function ProductHeader() {
           Home / Products
         </p>
         <h1 className="text-3xl md:text-4xl font-bold text-white">
-          EV Spare Parts Catalog
+          {SITE_CONFIG.name} Catalog
         </h1>
       </div>
     </section>

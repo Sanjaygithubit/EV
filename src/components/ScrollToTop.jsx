@@ -5,7 +5,11 @@ export default function ScrollToTop() {
   const { pathname, search } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Smooth scroll to top when route changes
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }, [pathname, search]);
 
   return null;

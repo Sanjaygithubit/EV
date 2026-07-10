@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { fadeUp } from "../utils/animations";
 import whyImg from "../assets/why.jpg";
 import CheckIcon from "./icons/CheckIcon";
+import { WHY_CHOOSE_US } from "../config/site";
 
 export default function WhyChooseUs() {
   const { scrollYProgress } = useScroll();
@@ -26,24 +27,7 @@ export default function WhyChooseUs() {
             </h2>
 
             <ul className="space-y-7">
-              {[
-                {
-                  title: "Verified EV suppliers",
-                  desc: "We work only with certified and trusted suppliers"
-                },
-                {
-                  title: "Genuine & compatible parts",
-                  desc: "100% authentic parts with quality assurance"
-                },
-                {
-                  title: "Dealer-friendly pricing",
-                  desc: "Competitive wholesale rates for bulk orders"
-                },
-                {
-                  title: "Fast dispatch system",
-                  desc: "Quick processing with PAN-India delivery"
-                }
-              ].map((item, i) => (
+              {WHY_CHOOSE_US.map((item, i) => (
                 <li key={i} className="flex gap-4 items-start">
                   <CheckIcon />
                   <div>
@@ -81,7 +65,6 @@ export default function WhyChooseUs() {
     shadow-xl
   "
 />
-
 </motion.div>
 
 

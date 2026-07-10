@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
+import { SITE_CONFIG } from "../config/site";
 
 export default function ProductModal({ product, onClose }) {
 
@@ -16,7 +17,29 @@ export default function ProductModal({ product, onClose }) {
     };
   }, [product]);
 
+  /* 🔥 ESC KEY TO CLOSE */
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    if (product) {
+      window.addEventListener("keydown", handleEsc);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [product, onClose]);
+
   if (!product) return null;
+
+  const whatsappUrl = SITE_CONFIG.social.whatsapp;
+  const whatsappMessage = encodeURIComponent(
+    `Hi, I am interested in ${product.name}. Please share details.`
+  );
 
   return (
     <AnimatePresence>
@@ -66,6 +89,9 @@ export default function ProductModal({ product, onClose }) {
             scrollbar-thumb-gray-300
             scrollbar-track-transparent
           "
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
         >
 
           {/* CLOSE BUTTON */}
@@ -79,6 +105,7 @@ export default function ProductModal({ product, onClose }) {
               transition
               z-20
             "
+            aria-label="Close modal"
           >
             ✕
           </button>
@@ -104,6 +131,7 @@ export default function ProductModal({ product, onClose }) {
 
             {/* TITLE */}
             <h2
+              id="modal-title"
               className="
                 text-2xl
                 md:text-4xl
@@ -167,7 +195,7 @@ export default function ProductModal({ product, onClose }) {
 
               {/* WHATSAPP */}
               <a
-                href={`https://wa.me/91XXXXXXXXXX?text=I'm interested in ${product.name}`}
+                href={`${whatsappUrl}?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noreferrer"
                 className="

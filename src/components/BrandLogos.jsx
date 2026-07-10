@@ -1,11 +1,5 @@
 import { motion } from "framer-motion";
-
-const brands = [
-  "/src/assets/brands/brand1.png",
-  "/src/assets/brands/brand2.png",
-  "/src/assets/brands/brand3.png",
-  "/src/assets/brands/brand4.png"
-];
+import { BRANDS } from "../config/site";
 
 export default function BrandLogos() {
   return (
@@ -25,7 +19,7 @@ export default function BrandLogos() {
               ease: "linear"
             }}
           >
-            {[...brands, ...brands].map((logo, i) => (
+            {[...BRANDS, ...BRANDS].map((logo, i) => (
               <div
                 key={i}
                 className="
@@ -39,6 +33,7 @@ export default function BrandLogos() {
                   src={logo}
                   alt="Brand logo"
                   className="max-h-12 object-contain"
+                  loading="lazy"
                 />
               </div>
             ))}

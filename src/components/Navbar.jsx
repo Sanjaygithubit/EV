@@ -1,20 +1,16 @@
 import { NavLink, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SITE_CONFIG, NAV_CATEGORIES } from "../config/site";
 
-export default function Navbar() {
+const NavbarComponent = () => {
   const [open, setOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
+  const mobileMenuRef = useRef(null);
 
-  const categories = [
-    "EV Bike Spare Parts",
-    "EV Rickshaw Spare Parts",
-    "EV Bicycle Conversion Kit",
-    "EV Conversion Kit",
-    "EV Charger",
-    "EV Batteries"
-  ];
+  const categories = NAV_CATEGORIES;
+  const whatsappUrl = SITE_CONFIG.social.whatsapp;
 
   const linkClass = ({ isActive }) =>
     `relative px-4 py-2 transition ${
@@ -22,6 +18,38 @@ export default function Navbar() {
         ? "text-primary font-semibold"
         : "text-slate-300 hover:text-white"
     }`;
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setOpen(false);
+        setMobileProductsOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [open]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [open]);
 
   return (
     <header className="sticky top-0 z-50 bg-navy/90 backdrop-blur-xl border-b border-white/10">
@@ -69,6 +97,7 @@ export default function Navbar() {
                         <li key={index}>
                           <Link
                             to={`/products?category=${encodeURIComponent(cat)}`}
+                            onClick={() => setShowDropdown(false)}
                             className="flex justify-between px-4 py-2 rounded-xl text-sm text-gray-700 hover:bg-primary hover:text-white transition"
                           >
                             {cat}
@@ -89,9 +118,10 @@ export default function Navbar() {
 
           {/* WHATSAPP CTA */}
           <a
-            href="https://wa.me/919XXXXXXXXX"
+            href={whatsappUrl}
             target="_blank"
             rel="noreferrer"
+            aria-label="Chat on WhatsApp"
             className="bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-medium shadow-md hover:shadow-lg transition"
           >
             WhatsApp
@@ -102,8 +132,10 @@ export default function Navbar() {
         <button
           onClick={() => setOpen(!open)}
           className="md:hidden text-white text-2xl"
+          aria-label="Toggle menu"
+          aria-expanded={open}
         >
-          ☰
+          {open ? '✕' : '☰'}
         </button>
       </nav>
 
@@ -111,6 +143,7 @@ export default function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={mobileMenuRef}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -165,9 +198,10 @@ export default function Navbar() {
             </NavLink>
 
             <a
-              href="https://wa.me/919XXXXXXXXX"
+              href={whatsappUrl}
               target="_blank"
               rel="noreferrer"
+              aria-label="Chat on WhatsApp"
               className="block mt-4 bg-primary text-white text-center px-4 py-2 rounded-xl font-medium"
             >
               WhatsApp Enquiry
@@ -177,4 +211,8 @@ export default function Navbar() {
       </AnimatePresence>
     </header>
   );
-}
+};
+
+// Memoize to prevent unnecessary re-renders
+const Navbar = memo(NavbarComponent);
+export default Navbar;

@@ -1,31 +1,5 @@
 import { motion } from "framer-motion";
-
-const highlights = [
-  {
-    icon: "shield",
-    value: "100%",
-    title: "Genuine EV Parts",
-    desc: "Certified and quality checked components"
-  },
-  {
-    icon: "tag",
-    value: "Dealer",
-    title: "Best Pricing",
-    desc: "Wholesale rates for bulk buyers"
-  },
-  {
-    icon: "truck",
-    value: "24–48H",
-    title: "Fast Dispatch",
-    desc: "Quick processing & shipping"
-  },
-  {
-    icon: "globe",
-    value: "PAN-India",
-    title: "Delivery Network",
-    desc: "Reliable logistics across India"
-  }
-];
+import { HIGHLIGHTS } from "../config/site";
 
 /* SIMPLE ICON SWITCH */
 function HighlightIcon({ type }) {
@@ -90,7 +64,7 @@ export default function KeyHighlights() {
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
 
-            {highlights.map((item, i) => (
+            {HIGHLIGHTS.map((item, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}

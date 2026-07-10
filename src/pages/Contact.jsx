@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { SITE_CONFIG } from "../config/site";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -16,6 +17,8 @@ const IconBox = ({ children }) => (
 );
 
 export default function Contact() {
+  const { contact, social } = SITE_CONFIG;
+
   return (
     <>
       {/* HEADER */}
@@ -59,8 +62,9 @@ export default function Contact() {
               <div>
                 <p className="font-medium">Address</p>
                 <p className="text-sm text-muted">
-                  123 EV Industrial Park<br />
-                  Sector 15, Delhi 110001
+                  {contact.address.street}<br />
+                  {contact.address.area}, {contact.address.city} {contact.address.pincode}<br />
+                  {contact.address.country}
                 </p>
               </div>
             </div>
@@ -69,10 +73,13 @@ export default function Contact() {
               <IconBox>📞</IconBox>
               <div>
                 <p className="font-medium">Phone</p>
-                <p className="text-sm text-muted">
-                  +91 123 456 7890<br />
-                  +91 098 765 4321
-                </p>
+                {contact.phone.map((phone) => (
+                  <p key={phone} className="text-sm text-muted">
+                    <a href={`tel:${phone.replace(/\s/g, '')}`} className="hover:text-primary transition">
+                      {phone}
+                    </a>
+                  </p>
+                ))}
               </div>
             </div>
 
@@ -80,10 +87,13 @@ export default function Contact() {
               <IconBox>✉️</IconBox>
               <div>
                 <p className="font-medium">Email</p>
-                <p className="text-sm text-muted">
-                  info@evparts.com<br />
-                  sales@evparts.com
-                </p>
+                {contact.email.map((email) => (
+                  <p key={email} className="text-sm text-muted">
+                    <a href={`mailto:${email}`} className="hover:text-primary transition">
+                      {email}
+                    </a>
+                  </p>
+                ))}
               </div>
             </div>
 
@@ -92,8 +102,8 @@ export default function Contact() {
               <div>
                 <p className="font-medium">Business Hours</p>
                 <p className="text-sm text-muted">
-                  Mon – Sat: 9AM – 6PM<br />
-                  Sunday: Closed
+                  Mon – Sat: {contact.businessHours.weekdays}<br />
+                  Sunday: {contact.businessHours.weekend}
                 </p>
               </div>
             </div>
@@ -119,15 +129,45 @@ export default function Contact() {
           >
             <h3 className="text-xl font-semibold mb-6">Get Expert CallBack</h3>
 
-            <form className="space-y-5">
-              <input className="w-full border rounded-xl px-4 py-3" placeholder="Full Name *" />
-              <input className="w-full border rounded-xl px-4 py-3" placeholder="Email Address *" />
-              <input className="w-full border rounded-xl px-4 py-3" placeholder="Phone Number *" />
-             
+            <form className="space-y-5" onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target);
+              const name = formData.get('name');
+              const phone = formData.get('phone');
+              const email = formData.get('email');
+              const message = formData.get('message');
+              const whatsappMsg = encodeURIComponent(
+                `Hi, I'm ${name}. Phone: ${phone}. Email: ${email}. Message: ${message}`
+              );
+              window.open(`${social.whatsapp}?text=${whatsappMsg}`, '_blank');
+            }}>
+              <input 
+                name="name"
+                className="w-full border rounded-xl px-4 py-3" 
+                placeholder="Full Name *" 
+                required 
+              />
+              <input 
+                name="email"
+                type="email"
+                className="w-full border rounded-xl px-4 py-3" 
+                placeholder="Email Address *" 
+                required 
+              />
+              <input 
+                name="phone"
+                type="tel"
+                className="w-full border rounded-xl px-4 py-3" 
+                placeholder="Phone Number *" 
+                required 
+              />
+              
               <textarea
+                name="message"
                 rows="4"
                 className="w-full border rounded-xl px-4 py-3"
                 placeholder="Tell us about your requirement..."
+                required
               />
 
               {/* SUBMIT CTA — SWEEP */}
@@ -160,7 +200,9 @@ export default function Contact() {
 
             {/* WHATSAPP CTA — SWEEP */}
             <a
-              href="https://wa.me/919XXXXXXXXX"
+              href={social.whatsapp}
+              target="_blank"
+              rel="noreferrer"
               className="
                 relative overflow-hidden
                 inline-block

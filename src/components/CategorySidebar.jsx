@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
+import { CATEGORIES, SUB_CATEGORIES } from "../config/site";
 
-export default function CategorySidebar({
-  categories,
-  subCategories,
+const CategorySidebar = memo(function CategorySidebar({
   activeCategory,
   setActiveCategory,
   activeSub,
-  setActiveSub,
-  isMobile
+  setActiveSub
 }) {
   const [openCategory, setOpenCategory] = useState(null);
 
@@ -23,9 +21,9 @@ export default function CategorySidebar({
 
       <div className="flex flex-col gap-2">
 
-        {categories.map((cat) => {
+        {CATEGORIES.filter(cat => cat !== "All").map((cat) => {
           const isActive = activeCategory === cat;
-          const hasSub = subCategories[cat];
+          const hasSub = SUB_CATEGORIES[cat];
 
           return (
             <div key={cat}>
@@ -87,4 +85,6 @@ export default function CategorySidebar({
       </div>
     </div>
   );
-}
+});
+
+export default CategorySidebar;

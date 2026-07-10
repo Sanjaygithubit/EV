@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { motion } from "framer-motion";
 
-export default function ProductCard({ product, onClick }) {
+const ProductCard = memo(function ProductCard({ product, onClick }) {
   return (
     <motion.div
       whileHover={{ y: -6 }}
@@ -24,16 +25,16 @@ export default function ProductCard({ product, onClick }) {
        <img
   src={product.image}
   alt={product.name}
- className="
-  h-full
-  w-full
-  object-contain
-  p-3
-  transition-transform
-  duration-500
-  ease-out
-  group-hover:scale-[1.04]
-"
+  className="
+    h-full
+    w-full
+    object-contain
+    p-3
+    transition-transform
+    duration-500
+    ease-out
+    group-hover:scale-[1.04]
+  "
 />
 
       </div>
@@ -88,4 +89,6 @@ export default function ProductCard({ product, onClick }) {
       </div>
     </motion.div>
   );
-}
+});
+
+export default ProductCard;

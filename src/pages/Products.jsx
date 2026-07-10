@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -7,29 +7,9 @@ import CategorySidebar from "../components/CategorySidebar";
 import ProductCard from "../components/ProductCard";
 import ProductModal from "../components/ProductModal";
 import products from "../data/products";
+import { CATEGORIES, SUB_CATEGORIES } from "../config/site";
 
-/* CATEGORIES */
-const categories = [
-  "All",
-  "EV Batteries",
-  "EV Charger",
-  "EV Rickshaw",
-  "EV Bike Spare Parts",
-  "EV Bicycle Conversion Kit",
-  "EV Conversion Kit"
-];
-
-/* SUB CATEGORIES */
-const subCategories = {
-  "EV Rickshaw": ["Motor", "Controller", "Gear Box", "Battery", "Charger"],
-  "EV Bike Spare Parts": ["Motor", "Controller", "Brake", "Display"],
-  "EV Bicycle Conversion Kit": ["Bicycle Kit"],
-  "EV Conversion Kit": ["Scooter Kit", "Bike Kit"],
-  "EV Batteries": ["Lithium", "Lead Acid"],
-  "EV Charger": ["Lithium Charger", "Lead Acid Charger"]
-};
-
-export default function Products() {
+const ProductsPage = () => {
   const [searchParams] = useSearchParams();
   const categoryFromUrl = searchParams.get("category");
 
@@ -44,7 +24,7 @@ export default function Products() {
 
   /* URL SYNC */
   useEffect(() => {
-    if (categoryFromUrl && categories.includes(categoryFromUrl)) {
+    if (categoryFromUrl && CATEGORIES.includes(categoryFromUrl)) {
       setActiveCategory(categoryFromUrl);
       setActiveSub(null);
     }
@@ -104,8 +84,8 @@ export default function Products() {
           <div className="hidden lg:block">
             <div className="sticky top-24">
               <CategorySidebar
-                categories={categories}
-                subCategories={subCategories}
+                categories={CATEGORIES}
+                subCategories={SUB_CATEGORIES}
                 activeCategory={activeCategory}
                 setActiveCategory={(cat) => {
                   setActiveCategory(cat);
@@ -198,7 +178,7 @@ export default function Products() {
                     Categories
                   </h4>
 
-                  {categories.map((cat) => (
+                  {CATEGORIES.map((cat) => (
                     <button
                       key={cat}
                       onClick={() => {
@@ -220,14 +200,14 @@ export default function Products() {
 
                 {/* SUB CATEGORY */}
                 {activeCategory !== "All" &&
-                  subCategories[activeCategory] && (
+                  SUB_CATEGORIES[activeCategory] && (
                     <div>
                       <h4 className="text-sm mb-3 text-gray-500 uppercase">
                         Sub Categories
                       </h4>
 
                       <div className="flex flex-wrap gap-2">
-                        {subCategories[activeCategory].map((sub) => (
+                        {SUB_CATEGORIES[activeCategory].map((sub) => (
                           <button
                             key={sub}
                             onClick={() => {
@@ -260,4 +240,8 @@ export default function Products() {
       />
     </>
   );
-}
+};
+
+// Memoize to prevent unnecessary re-renders
+const Products = memo(ProductsPage);
+export default Products;
