@@ -124,12 +124,12 @@ export const SEGMENTS = [
   {
     title: "EV Bike Spare Parts",
     desc: "Batteries, chargers, displays & motors",
-    bgImage: "/images/bg-bike.jpg"
+    bgImage: "/src/assets/bike spar seg.png"
   },
   {
     title: "EV Rickshaw Spare Parts",
     desc: "Motors, controllers, wiring & accessories",
-    bgImage: "/images/bg-rickshaw.jpg"
+    bgImage: "/src/assets/rickshaw.png"
   },
   {
     title: "EV Bicycle Conversion Kit",
