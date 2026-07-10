@@ -67,7 +67,7 @@ export default function Segments() {
     <section
       ref={sectionRef}
       style={{ height: `${segments.length * 100}vh` }}
-      className="relative"
+      className="relative bg-gray-900"
     >
       <div className="sticky top-0 h-screen flex items-center justify-center px-4">
 
@@ -109,16 +109,16 @@ export default function Segments() {
               md:px-24
             "
           >
-            {/* Background */}
+            {/* Background Image - Full Card */}
             <div
-              className="absolute inset-0 bg-center bg-no-repeat"
+              className="absolute inset-0 bg-center bg-cover"
               style={{
-                backgroundImage: `url(${segments[active].bgImage})`,
-                backgroundSize: "1200px 800px"
+                backgroundImage: `url(${segments[active].image})`
               }}
             />
 
-            <div className="absolute inset-0 bg-black/60" />
+            {/* Gradient Overlay for better text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-black/20 to-transparent" />
 
             {/* Right Text */}
             <motion.div
@@ -129,7 +129,7 @@ export default function Segments() {
                 delay: 0.1,
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
-              className="relative z-10 text-white max-w-xl px-4 md:px-0"
+              className="relative z-10 text-white max-w-xl px-6 md:px-24"
             >
               <span className="text-primary text-xs md:text-sm font-semibold tracking-wide uppercase">
                 EV Segment

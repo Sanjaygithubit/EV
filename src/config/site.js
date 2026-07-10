@@ -124,32 +124,38 @@ export const SEGMENTS = [
   {
     title: "EV Bike Spare Parts",
     desc: "Batteries, chargers, displays & motors",
-    bgImage: "/src/assets/bike spar seg.png"
+    bgImage: "/src/assets/bike.png",
+    image: "/src/assets/bike.png"
   },
   {
     title: "EV Rickshaw Spare Parts",
     desc: "Motors, controllers, wiring & accessories",
-    bgImage: "/src/assets/rickshaw.png"
+    bgImage: "/src/assets/rickshaw.png",
+    image: "/src/assets/rickshaw.png"
   },
   {
     title: "EV Bicycle Conversion Kit",
     desc: "Convert bicycles into electric vehicles",
-    bgImage: "/images/bg-cycle.jpg"
+    bgImage: "/src/assets/why.jpg",
+    image: "/src/assets/why.jpg"
   },
   {
     title: "EV Conversion Kit",
     desc: "Complete EV conversion solutions",
-    bgImage: "/images/bg-kit.jpg"
+    bgImage: "/images/bg-kit.jpg",
+    image: "/src/assets/hero.jpg"
   },
   {
     title: "EV Charger",
     desc: "AC & DC fast charging solutions",
-    bgImage: "/images/bg-charger.jpg"
+    bgImage: "/images/bg-charger.jpg",
+    image: "/src/assets/hero.jpg"
   },
   {
     title: "EV Batteries",
     desc: "Lithium-ion & lead-acid battery packs",
-    bgImage: "/images/bg-battery.jpg"
+    bgImage: "/images/bg-battery.jpg",
+    image: "/src/assets/hero.jpg"
   }
 ];
 
