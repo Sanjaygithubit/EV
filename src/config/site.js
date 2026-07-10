@@ -1,3 +1,6 @@
+import bike from "../assets/bike.png";
+
+<img src={bikeSeg} alt="EV Bike Spare Parts" />
 // Site Configuration - Centralized constants
 export const SITE_CONFIG = {
   name: "EV Spare Parts",
